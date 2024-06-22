@@ -9,12 +9,26 @@ import SwiftUI
 
 @main
 struct spotify_clone_aApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     let persistenceController = PersistenceController.shared
-
+    
+    @StateObject var appState: AppState = .shared
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            switch appState.currentScreen {
+            case .launch:
+                LaunchView()
+                    .environmentObject(appState)
+            case .signIn:
+                SignInView()
+                    .environmentObject(appState)
+            case .main:
+                MainView()
+                    .environmentObject(appState)
+            }
+            
         }
     }
 }
